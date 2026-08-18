@@ -29,6 +29,13 @@
       </div>
     {% endif %}
 
+    {% if save_status %}
+      <div class="result {{ 'weak' if save_status.status == 'old' else 'strong' }}">
+        {{ save_status.message }}
+      </div>
+    {% endif %}
+
+
     {% if suggestion %}
       <div class="result strong">
         <strong>Suggested Strong Password:</strong> {{ suggestion }}
