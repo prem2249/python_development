@@ -38,12 +38,14 @@ jobs:
     steps:
       - name: Git Checkout
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 2
 
       - name: Detect source changes
         id: changes
         run: |
           # Compare against the previous commit
-          if git diff --quiet HEAD^ HEAD -- .; then
+          if git diff --quiet ${{ github.event.before }} ${{ github.sha }} -- .; then
             echo "changed=false" >> $GITHUB_ENV
           else
             echo "changed=true" >> $GITHUB_ENV
