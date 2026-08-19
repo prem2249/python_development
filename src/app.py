@@ -20,7 +20,7 @@ def index():
 
     return render_template("index.html", result=result, suggestion=suggestion, save_status=save_status)
 
-# ✅ Add this health endpoint
+# ✅ Add this route for probes
 @app.route("/health")
 def health():
     return "OK", 200
