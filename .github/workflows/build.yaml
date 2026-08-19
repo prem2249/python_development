@@ -40,11 +40,11 @@ jobs:
         with:
           fetch-depth: 2
 
-       # Detect changes only in src/ folder
-      - name: Detect Code Changes
+       # Detect changes in src/ or requirements.txt or Dockerfile
+      - name: Detect code changes
         id: changes
         run: |
-          if git diff --quiet ${{ github.event.before }} ${{ github.sha }} -- src; then
+          if git diff --quiet ${{ github.event.before }} ${{ github.sha }} -- src requirements.txt Dockerfile; then
             echo "changed=false" >> $GITHUB_ENV
           else
             echo "changed=true" >> $GITHUB_ENV
