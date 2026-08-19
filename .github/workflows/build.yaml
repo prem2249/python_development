@@ -42,7 +42,7 @@ jobs:
           fetch-depth: 2
 
        # Detect changes only in src/ folder
-      - name: Detect src changes
+      - name: Detect Code Changes
         id: changes
         run: |
           if git diff --quiet ${{ github.event.before }} ${{ github.sha }} -- src; then
@@ -52,7 +52,7 @@ jobs:
           fi
 
       # If no changes, just show last image tag
-      - name: Show last image tag
+      - name: Show last Image Tag
         if: env.changed == 'false'
         run: |
           echo "No changes in src/ folder."
@@ -60,19 +60,19 @@ jobs:
           docker pull ${{ secrets.DOCKER_USERNAME }}/python-pw-app:latest
           docker images ${{ secrets.DOCKER_USERNAME }}/python-pw-app --format "{{.Repository}}:{{.Tag}}" | head -n 1
           
-      - name: Set up Python
+      - name: Set Up Python
         if: env.changed == 'true'
         uses: actions/setup-python@v3
         with:
           python-version: '3.11'
 
-      - name: Install dependencies
+      - name: Install Dependencies
         if: env.changed == 'true'
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run tests
+      - name: Run Tests
         if: env.changed == 'true'
         run: pytest || echo "No tests found, skipping..."
       
@@ -81,19 +81,19 @@ jobs:
         run: |
           echo "TAG=${GITHUB_REF_NAME}-$(date +%Y%m%d%H%M%S)" >> $GITHUB_ENV
       
-      - name: Docker build
+      - name: Docker Build
         if: env.changed == 'true'
         run: |
           docker build -t python-pw-app .
 
-      - name: Docker login
+      - name: Docker Login
         if: env.changed == 'true'
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Docker push
+      - name: Docker Push
         if: env.changed == 'true'
         run: |
           docker tag python-pw-app:latest ${{ secrets.DOCKER_USERNAME }}/python-pw-app:$TAG
