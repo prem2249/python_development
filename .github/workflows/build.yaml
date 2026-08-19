@@ -65,5 +65,5 @@ jobs:
 
       - name: Docker push
         run: |
-          docker tag python-pw-app:latest ${{ secrets.DOCKER_USERNAME }}/python-pw-app:${{BUILD_DATE}}
-          docker push ${{ secrets.DOCKER_USERNAME }}/python-pw-app:${{BUILD_DATE}}
+          docker tag python-pw-app:latest ${{ secrets.DOCKER_USERNAME }}/python-pw-app:${{ env.BUILD_DATE }}
+          docker push ${{ secrets.DOCKER_USERNAME }}/python-pw-app:${{ env.BUILD_DATE }}
