@@ -9,9 +9,9 @@ WORKDIR /app
 # Update Alpine packages to patched versions
 RUN apk update && apk upgrade --no-cache && \
     apk add --no-cache \
-      util-linux=2.41.4-r0 \
-      openssl=3.3.6-r0 \
-      sqlite=3.53.4-r0 \
+      util-linux \
+      openssl \
+      sqlite \
       build-base
 
 # Copy requirements and install into /install
@@ -31,9 +31,9 @@ WORKDIR /app
 
 RUN apk update && apk upgrade --no-cache && \
     apk add --no-cache \
-      util-linux=2.41.4-r0 \
-      openssl=3.3.6-r0 \
-      sqlite=3.53.4-r0
+      util-linux \
+      openssl \
+      sqlite
 
 COPY --from=builder /install /usr/local
 COPY --from=builder /app/src ./src
