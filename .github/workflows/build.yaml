@@ -1,9 +1,3 @@
-#TAG = "$(git rev-parse --short HEAD)-${BUILD_ID}"
-#docker build -t python-pw-app:${TAG} .
-#docker tag python-pw-app:latest ${{ secrets.DOCKER_USERNAME }}/python-pw-app:${{ date('YmdHis') }}
-#docker push ${{ secrets.DOCKER_USERNAME }}/python-pw-app:${{ date('YmdHis') }}
-
-
 # Tested
 #1. docker tag python-pw-app:latest ${{ secrets.DOCKER_USERNAME }}/python-pw-app:$BUILD_DATE
 #   docker push ${{ secrets.DOCKER_USERNAME }}/python-pw-app:$BUILD_DATE
@@ -72,5 +66,5 @@ jobs:
 
       - name: Docker push
         run: |
-          docker tag python-pw-app:latest ${{ secrets.DOCKER_USERNAME }}/python-pw-app:BUILD_ID
-          docker push ${{ secrets.DOCKER_USERNAME }}/python-pw-app:$BUILD_ID
+          docker tag python-pw-app:latest ${{ secrets.DOCKER_USERNAME }}/python-pw-app:${{ date('YmdHis') }}
+          docker push ${{ secrets.DOCKER_USERNAME }}/python-pw-app:${{ date('YmdHis') }}
