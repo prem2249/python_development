@@ -95,7 +95,7 @@ jobs:
       - name: Docker Push
         if: env.changed == 'true'
         run: |
-          docker tag python-pw-app:latest prem24/python-pw-app:$TAG
-          docker push prem24/python-pw-app:$TAG
           docker tag python-pw-app:latest prem24/python-pw-app:latest
           docker push prem24/python-pw-app:latest
+          docker tag python-pw-app:latest prem24/python-pw-app:$TAG
+          docker push prem24/python-pw-app:$TAG
