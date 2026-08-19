@@ -41,24 +41,25 @@ jobs:
         with:
           fetch-depth: 2
 
-      - name: Detect source changes
+       # Detect changes only in src/ folder
+      - name: Detect src changes
         id: changes
         run: |
-          # Compare against the previous commit
-          if git diff --quiet ${{ github.event.before }} ${{ github.sha }} -- .; then
+          if git diff --quiet ${{ github.event.before }} ${{ github.sha }} -- src; then
             echo "changed=false" >> $GITHUB_ENV
           else
             echo "changed=true" >> $GITHUB_ENV
           fi
-      
+
+      # If no changes, just show last image tag
       - name: Show last image tag
         if: env.changed == 'false'
         run: |
-          echo "No source changes detected."
+          echo "No changes in src/ folder."
           echo "Last pushed image tag:"
           docker pull ${{ secrets.DOCKER_USERNAME }}/python-pw-app:latest
           docker images ${{ secrets.DOCKER_USERNAME }}/python-pw-app --format "{{.Repository}}:{{.Tag}}" | head -n 1
-
+          
       - name: Set up Python
         if: env.changed == 'true'
         uses: actions/setup-python@v3
