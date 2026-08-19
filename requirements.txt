@@ -1,5 +1,10 @@
 Flask==3.0.3
-Werkzeug==3.0.3
+Werkzeug==3.0.6
 Jinja2==3.1.4
 itsdangerous==2.2.0
-click==8.1.8
+click==8.3.3
+
+# Build/runtime tools pinned to patched versions
+pip==26.0
+wheel==0.46.2
+setuptools==83.0.0

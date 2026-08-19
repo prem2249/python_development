@@ -1,4 +1,3 @@
-# -------- Builder Stage --------
 FROM python:3.11.8-alpine3.19 AS builder
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
@@ -7,16 +6,18 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 WORKDIR /app
 
-# Update Alpine packages and install build dependencies
+# Update Alpine packages to patched versions
 RUN apk update && apk upgrade --no-cache && \
-    apk add --no-cache build-base
+    apk add --no-cache \
+      util-linux=2.41.4-r0 \
+      openssl=3.3.6-r0 \
+      sqlite=3.53.4-r0 \
+      build-base
 
 # Copy requirements and install into /install
 COPY requirements.txt .
-RUN pip install --upgrade pip && \
-    pip install --prefix=/install -r requirements.txt
+RUN pip install --prefix=/install -r requirements.txt
 
-# Copy source code including templates and static inside src/
 COPY src/ ./src/
 
 # -------- Runtime Stage --------
@@ -28,20 +29,20 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 WORKDIR /app
 
-# Apply Alpine security updates
-RUN apk update && apk upgrade --no-cache
+RUN apk update && apk upgrade --no-cache && \
+    apk add --no-cache \
+      util-linux=2.41.4-r0 \
+      openssl=3.3.6-r0 \
+      sqlite=3.53.4-r0
 
-# Copy installed packages and app code
 COPY --from=builder /install /usr/local
 COPY --from=builder /app/src ./src
 
-# Create non-root user
 RUN adduser -D appuser && chown -R appuser:appuser /app
 USER appuser
 
 EXPOSE 5000
 
-# Healthcheck for orchestration
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
   CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:5000/health')" || exit 1
 
