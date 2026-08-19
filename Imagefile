@@ -1,11 +1,11 @@
 # Use a slim official Python image
 FROM python:3.11-slim
 
-# Environment settings for security and performance
+# Set environment variables for security
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1
 
-# Create non-root user
+# Create a non-root user for running the app
 RUN adduser --disabled-password --gecos '' appuser
 
 # Set working directory
@@ -18,8 +18,8 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir --upgrade pip \
     && pip install --no-cache-dir -r requirements.txt
 
-# Copy only source code (excluding Dockerfile, README, workflow files)
-COPY src/ ./src/
+# Copy application code
+COPY . .
 
 # Change ownership to non-root user
 RUN chown -R appuser:appuser /app
@@ -30,5 +30,5 @@ USER appuser
 # Expose Flask default port
 EXPOSE 5000
 
-# Run the Flask app (assuming entrypoint is src/app.py)
-CMD ["python", "src/app.py"]
+# Run the Flask app
+CMD ["python", "app.py"]
