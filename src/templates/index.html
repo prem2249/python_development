@@ -14,6 +14,7 @@
       <button type="submit" name="suggest">Get Suggestion</button>
     </form>
 
+    
     {% if result %}
       <div class="result {{ result.strength|lower }}">
         <strong>Score:</strong> {{ result.score }}/100 <br>
