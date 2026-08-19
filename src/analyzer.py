@@ -3,9 +3,11 @@ import sqlite3
 import secrets
 import string
 import math
+import os
 
 class PasswordStrengthAnalyzer:
     def __init__(self, db_path="passwords.db"):
+        db_path = "/app/data/passwords.db"   # <-- use emptyDir mount
         self.conn = sqlite3.connect(db_path, check_same_thread=False)
         self.cursor = self.conn.cursor()
         self.cursor.execute("""

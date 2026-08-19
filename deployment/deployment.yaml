@@ -44,3 +44,9 @@ spec:
             limits:
               cpu: "500m"
               memory: "512Mi"
+          volumeMounts:
+            - name: pw-storage
+              mountPath: /app/data
+      volumes:
+        - name: pw-storage
+          emptyDir: {}

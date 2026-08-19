@@ -17,7 +17,7 @@ permissions:
 
 on:
   push:
-   branches: [ feature-task1 ]
+   branches: [ feature-task2 ]
 
   workflow_dispatch:
     inputs:
