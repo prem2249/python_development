@@ -1,14 +1,12 @@
-# Tested
-#1. docker tag python-pw-app:latest ${{ secrets.DOCKER_USERNAME }}/python-pw-app:$BUILD_DATE
-#   docker push ${{ secrets.DOCKER_USERNAME }}/python-pw-app:$BUILD_DATE
-#   var: echo "BUILD_DATE=$(date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
+# Tags
+#1. echo "BUILD_DATE=$(date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
 #   example tag: 20260819080237
 #
-#2. docker tag python-pw-app:latest ${{ secrets.DOCKER_USERNAME }}/python-pw-app:$SHORT_SHA
-#   docker push ${{ secrets.DOCKER_USERNAME }}/python-pw-app:$SHORT_SHA
-# var    run: echo "SHORT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
-# example: b6a8884
-
+#2. echo "SHORT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+#   example: b6a8884
+#
+#3. echo "TAG=${GITHUB_REF_NAME}-$(date +%Y%m%d%H%M%S)" >> $GITHUB_ENV
+#   example: 
 
 name: Python Build
 
@@ -54,7 +52,7 @@ jobs:
       
       - name: Set Build Tag
         run: |
-          echo "TAG=$(git rev-parse --short HEAD)-${BUILD_ID}" >> $GITHUB_ENV
+          echo "TAG=${GITHUB_REF_NAME}-$(date +%Y%m%d%H%M%S)" >> $GITHUB_ENV
       
       - name: Docker build
         run: |
