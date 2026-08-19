@@ -50,7 +50,6 @@ class PasswordStrengthAnalyzer:
                     return False
                 if seq[i:i+4][::-1] in lowered:
                     return False
-
         return True
 
 
