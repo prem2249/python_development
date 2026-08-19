@@ -1,5 +1,5 @@
 #FROM python:3.11.8-alpine3.19 AS builder
-FROM python:3.11.8-alpine3.23 AS builder
+FROM python:3.11-alpine3.24 AS builder
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     PIP_NO_CACHE_DIR=1
@@ -21,7 +21,7 @@ RUN pip install --prefix=/install -r requirements.txt
 COPY src/ ./src/
 
 # -------- Runtime Stage --------
-FROM python:3.11.8-alpine3.19 AS runtime
+FROM python:3.11-alpine3.24 AS runtime
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
