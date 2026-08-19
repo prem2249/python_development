@@ -19,7 +19,6 @@ on:
   push:
    branches: [ feature-task1 ]
 
-
   workflow_dispatch:
     inputs:
       environment: 
