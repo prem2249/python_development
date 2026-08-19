@@ -79,7 +79,8 @@ jobs:
       - name: Docker Login
         uses: docker/login-action@v2
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
+          #username: ${{ secrets.DOCKER_USERNAME }}
+          username: prem24
           password: ${{ secrets.DOCKER_PASSWORD }}
       
       # If no changes, just show last image tag
@@ -88,13 +89,13 @@ jobs:
         run: |
           echo "No changes in src/ folder."
           echo "Last pushed image tag:"
-          docker pull ${{ secrets.DOCKER_USERNAME }}/python-pw-app:latest
-          docker images ${{ secrets.DOCKER_USERNAME }}/python-pw-app --format "{{.Repository}}:{{.Tag}}" | head -n 1
+          docker pull prem24/python-pw-app:latest
+          docker images prem24/python-pw-app --format "{{.Repository}}:{{.Tag}}" | head -n 1
 
       - name: Docker Push
         if: env.changed == 'true'
         run: |
-          docker tag python-pw-app:latest ${{ secrets.DOCKER_USERNAME }}/python-pw-app:$TAG
-          docker push ${{ secrets.DOCKER_USERNAME }}/python-pw-app:$TAG
-          docker tag python-pw-app:latest ${{ secrets.DOCKER_USERNAME }}/python-pw-app:latest
-          docker push ${{ secrets.DOCKER_USERNAME }}/python-pw-app:latest
+          docker tag python-pw-app:latest prem24/python-pw-app:$TAG
+          docker push prem24/python-pw-app:$TAG
+          docker tag python-pw-app:latest prem24/python-pw-app:latest
+          docker push prem24/python-pw-app:latest
