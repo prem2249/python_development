@@ -70,5 +70,5 @@ jobs:
 
       - name: Docker push
         run: |
-          docker tag python-pw-app:latest ${{ secrets.DOCKER_USERNAME }}/python-pw-app:$$SHORT_SHA
+          docker tag python-pw-app:latest ${{ secrets.DOCKER_USERNAME }}/python-pw-app:$SHORT_SHA
           docker push ${{ secrets.DOCKER_USERNAME }}/python-pw-app:$SHORT_SHA
