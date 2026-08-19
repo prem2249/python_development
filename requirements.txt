@@ -4,7 +4,10 @@ Jinja2==3.1.4
 itsdangerous==2.2.0
 click==8.3.3
 
-# Build/runtime tools pinned to patched versions
+# Build/runtime tools
 pip==26.0
 wheel==0.46.2
 setuptools==83.0.0
+
+# Vulnerability fixes
+jaraco.context==6.1.0
