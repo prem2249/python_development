@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: python-pw-app
+  labels:
+    app: python-pw-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: python-pw-app
+  template:
+    metadata:
+      labels:
+        app: python-pw-app
+    spec:
+      imagePullSecrets:
+        - name: regcred   # <-- reference the secret here
+      containers:
+        - name: python-pw-app
+          image: prem24/python-pw-app:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5000
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 5000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 5000
+            initialDelaySeconds: 10
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
