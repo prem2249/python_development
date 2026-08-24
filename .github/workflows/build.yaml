@@ -1,5 +1,4 @@
 name: Python Build
-
 # Tags
 #1. echo "BUILD_DATE=$(date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
 #   example tag: 20260819080237
