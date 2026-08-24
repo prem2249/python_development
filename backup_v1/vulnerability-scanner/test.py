@@ -1,0 +1,145 @@
+import socket
+import re
+import datetime
+import requests
+
+# Common ports to check
+COMMON_PORTS = [21, 22, 23, 25, 53, 80, 110, 143, 443, 3306, 8080, 5000]
+NVD_API = "https://services.nvd.nist.gov/rest/json/cves/2.0"
+
+def extract_service_version(banner: str):
+    """
+    Extract service and version from banner dynamically.
+    """
+    if not banner or banner == "Unknown service":
+        return None, None
+    match = re.search(r"([A-Za-z0-9\-_\.]+)[/ ]([0-9]+\.[0-9]+(?:\.[0-9]+)?)", banner)
+    if match:
+        return match.group(1), match.group(2)
+    parts = banner.split()
+    if len(parts) >= 1:
+        return parts[0], None
+    return None, None
+
+def check_cves(service, version):
+    """
+    Query NVD for CVEs matching service/version.
+    """
+    if not service:
+        return []
+    query = f"{service} {version}" if version else service
+    params = {"keywordSearch": query, "resultsPerPage": 3}
+    vulns = []
+    try:
+        resp = requests.get(NVD_API, params=params, timeout=6)
+        if resp.status_code == 200:
+            data = resp.json()
+            for entry in data.get("vulnerabilities", []):
+                cve = entry.get("cve", {})
+                cve_id = cve.get("id", "UNKNOWN")
+                descs = cve.get("descriptions", [])
+                description = descs[0]["value"] if descs else "No description"
+                score = None
+                severity = "low"
+                metrics = cve.get("metrics", {})
+                if "cvssMetricV31" in metrics:
+                    score = metrics["cvssMetricV31"][0]["cvssData"]["baseScore"]
+                elif "cvssMetricV30" in metrics:
+                    score = metrics["cvssMetricV30"][0]["cvssData"]["baseScore"]
+                elif "cvssMetricV2" in metrics:
+                    score = metrics["cvssMetricV2"][0]["cvssData"]["baseScore"]
+                if score:
+                    if score >= 9.0:
+                        severity = "high"
+                    elif score >= 5.0:
+                        severity = "medium"
+                vulns.append((cve_id, description, severity))
+    except Exception as e:
+        vulns.append(("Error", str(e), "low"))
+    return vulns
+
+def scan_ports(target, ports):
+    """
+    Scan ports and grab banners.
+    """
+    open_ports = {}
+    for port in ports:
+        try:
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.settimeout(0.6)
+            result = sock.connect_ex((target, port))
+            if result == 0:
+                banner = "Unknown service"
+                try:
+                    sock.send(b"HEAD / HTTP/1.0\r\n\r\n")
+                    banner = sock.recv(2048).decode(errors="ignore").strip()
+                except Exception:
+                    try:
+                        sock.send(b"\r\n")
+                        banner = sock.recv(2048).decode(errors="ignore").strip()
+                    except Exception:
+                        pass
+                open_ports[port] = banner
+            sock.close()
+        except Exception:
+            pass
+    return open_ports
+
+def generate_report(target, open_ports):
+    """
+    Generate vulnerability report with dynamic service/version + CVEs.
+    """
+    lines = []
+    lines.append("=== Vulnerability Scan Report ===")
+    lines.append(f"Target: {target}")
+    lines.append(f"Date: {datetime.datetime.now()}")
+    lines.append("")
+
+    if not open_ports:
+        lines.append("No open ports detected.")
+        return "\n".join(lines)
+
+    for port, banner in open_ports.items():
+        service, version = extract_service_version(banner)
+        lines.append(f"Port {port}: {service or 'Unknown'} {version or ''}")
+        vulns = check_cves(service, version)
+        if vulns:
+            for cve_id, desc, severity in vulns:
+                lines.append(f"   [!] {cve_id} ({severity})")
+                lines.append(f"       {desc}")
+        else:
+            lines.append("   No CVEs found.")
+        lines.append("")
+    return "\n".join(lines)
+
+if __name__ == "__main__":
+    target = input("Enter target IP/hostname/FQDN: ").strip()
+
+    print("\nSelect scan mode:")
+    print("1. Common Ports")
+    print("2. Range")
+    print("3. Custom List")
+    choice = input("Enter choice (1/2/3): ").strip()
+
+    if choice == "1":
+        ports = COMMON_PORTS
+    elif choice == "2":
+        start = int(input("Enter start port: ").strip())
+        end = int(input("Enter end port: ").strip())
+        ports = range(start, end + 1)
+    elif choice == "3":
+        custom = input("Enter comma-separated ports (e.g. 80,443,8080): ").strip()
+        ports = [int(p.strip()) for p in custom.split(",") if p.strip().isdigit()]
+    else:
+        print("Invalid choice, defaulting to common ports.")
+        ports = COMMON_PORTS
+
+    print(f"\nScanning {target}...\n")
+    open_ports = scan_ports(target, ports)
+    report = generate_report(target, open_ports)
+    print(report)
+
+    filename = f"vuln_report_{target.replace('.', '_')}.txt"
+    with open(filename, "w", encoding="utf-8") as f:
+        f.write(report)
+    print(f"\nReport saved to {filename}")

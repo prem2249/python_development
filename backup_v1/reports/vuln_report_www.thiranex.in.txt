@@ -1,0 +1,37 @@
+=== Vulnerability Scan Report ===
+Target: www.thiranex.in
+Date: 2026-08-25 02:09:08.665488
+
+Open Ports:
+ - Port 80 → HTTP/1.1 403 Forbidden
+Date: Mon, 24 Aug 2026 20:39:04 GMT
+Content-Type: text/plain; charset=UTF-8
+Content-Length: 17
+Connection: close
+Cache-Control: private, max-age=0, no-store, no-cache, must-revalidate, post-check=0, pre-check=0
+Expires: Thu, 01 Jan 1970 00:00:01 GMT
+Referrer-Policy: same-origin
+X-Frame-Options: SAMEORIGIN
+Server: cloudflare
+CF-RAY: a3052a0f7ba1ff7f-SIN
+   [!] HTTP 1.1 vulnerable → CVE-1999-0071: Apache httpd cookie buffer overflow for versions 1.1.1 and earlier.
+ - Port 443 → HTTP/1.1 400 Bad Request
+Server: cloudflare
+Date: Mon, 24 Aug 2026 20:39:06 GMT
+Content-Type: text/html
+Content-Length: 253
+Connection: close
+CF-RAY: -
+   [!] HTTP 1.1 vulnerable → CVE-1999-0071: Apache httpd cookie buffer overflow for versions 1.1.1 and earlier.
+ - Port 8080 → HTTP/1.1 403 Forbidden
+Date: Mon, 24 Aug 2026 20:39:08 GMT
+Content-Type: text/plain; charset=UTF-8
+Content-Length: 17
+Connection: close
+Cache-Control: private, max-age=0, no-store, no-cache, must-revalidate, post-check=0, pre-check=0
+Expires: Thu, 01 Jan 1970 00:00:01 GMT
+Referrer-Policy: same-origin
+X-Frame-Options: SAMEORIGIN
+Server: cloudflare
+CF-RAY: a3052a279cccfd3d-SIN
+   [!] HTTP 1.1 vulnerable → CVE-1999-0071: Apache httpd cookie buffer overflow for versions 1.1.1 and earlier.
