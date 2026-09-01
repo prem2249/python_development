@@ -37,14 +37,12 @@ It uses **CountVectorizer** for feature extraction and a **Naive Bayes classifie
    ```bash
     python model.py
 
-This generates:
+5. This generates:
+   ```bash
+   phishing_model.pkl
+   vectorizer.pkl
+   static/confusion_matrix.png
 
-phishing_model.pkl
-
-vectorizer.pkl
-
-static/confusion_matrix.png
-
-5. Run the Flask app:
+6. Run the Flask app:
    ```bash
     python app.py
