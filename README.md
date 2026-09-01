@@ -17,24 +17,6 @@ It uses **CountVectorizer** for feature extraction and a **Naive Bayes classifie
 
 ---
 
-## 📂 Project Structure
-phishing-email-detector/
-│── app.py                # Flask UI
-│── model.py              # Training script (Naive Bayes)
-│── utils.py              # File parsing + feature extraction
-│── requirements.txt       # Dependencies
-│── data/
-│   └── dataset.csv        # Training dataset
-│── templates/
-│   └── index.html         # Web UI
-│── static/
-│   └── style.css          # Styling
-│   └── confusion_matrix.png
-
-
-
----
-
 ## ⚙️ Setup Instructions
 1. Clone the repository:
    ```bash
