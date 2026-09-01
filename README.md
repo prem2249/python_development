@@ -1,4 +1,4 @@
-# Phishing Email Detection (Naive Bayes Version)
+# Phishing Email Detection
 
 This project demonstrates a simple machine learning model for detecting phishing emails using **Scikit‑learn**.  
 It uses **CountVectorizer** for feature extraction and a **Naive Bayes classifier**, achieving ~83% accuracy on the sample dataset.
