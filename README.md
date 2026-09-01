@@ -24,15 +24,18 @@ It uses **CountVectorizer** for feature extraction and a **Naive Bayes classifie
    cd phishing-email-detector
 
 2. Create a virtual environment
-python3 -m venv venv
-source venv/bin/activate   # Linux/macOS
-venv\Scripts\activate      # Windows
+   ```bash
+    python3 -m venv venv
+    source venv/bin/activate   # Linux/macOS
+    venv\Scripts\activate      # Windows
 
 3. Install dependencies:
-pip install -r requirements.txt
+   ```bash
+    pip install -r requirements.txt
 
 4. Train the model:
-python model.py
+   ```bash
+    python model.py
 
 This generates:
 
@@ -43,4 +46,5 @@ vectorizer.pkl
 static/confusion_matrix.png
 
 5. Run the Flask app:
-python app.py
+   ```bash
+    python app.py
